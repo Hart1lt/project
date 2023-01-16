@@ -22,7 +22,7 @@ fpsClock = pygame.time.Clock()
 width = 600
 height = 800
 mainSurface = pygame.display.set_mode((width, height), 0, 32)
-pygame.display.set_caption('Key moves')
+pygame.display.set_caption('Космический шериф')
 cell = 50
 TEXTCOLOR = (255, 255, 255)
 
