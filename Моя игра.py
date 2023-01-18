@@ -85,6 +85,18 @@ def over():
     gameOverSound.play()
 
 
+def get_click(screen):
+    pos = event.pos
+    x = pos[0]
+    y = pos[1]
+    x1, y1 = x // cell, y // cell
+    if x1 < 0 or width < x1:
+        print('None')
+    else:
+        coord = x, y
+        print(coord)
+
+
 def move(direction, spritex, spritey):
         spritey += 10
         if direction:
@@ -96,39 +108,38 @@ def move(direction, spritex, spritey):
 
 
 while True:
-    fpsClock.tick(FPS)
-    if point <= 10:
-        mainSurface.blit(background4, (0, 0))
-    elif point <= 30:
-        mainSurface.blit(background3, (0, 0))
-    elif point <= 50:
-        mainSurface.blit(background2, (0, 0))
-    elif point <= 60:
-        mainSurface.blit(background, (0, 0))
-    mainSurface.blit(sprite, (spritex, spritey))
-    mainSurface.blit(spriteb, (spritebx, spriteby))
-    drawText(str(point), font2, mainSurface, 10, 10)
+    mainSurface.blit(background, (0, 0))
     for event in pygame.event.get():
-        if event.type == QUIT:
-            pygame.quit()
-            sys.exit()
-        if event.type == KEYDOWN and event.key == K_ESCAPE:
-            pygame.quit()
-            sys.exit()
-        if event.type == KEYDOWN:
-            direction = event.key
-        if event.type == KEYUP:
-            direction = False
+        if event.type == pygame.QUIT:
+            running = False
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            board.get_click(event.pos)
+            while True:
+                fpsClock.tick(FPS)
+                mainSurface.blit(sprite, (spritex, spritey))
+                mainSurface.blit(spriteb, (spritebx, spriteby))
+                drawText(str(point), font2, mainSurface, 10, 10)
+                for event in pygame.event.get():
+                    if event.type == QUIT:
+                        pygame.quit()
+                        sys.exit()
+                    if event.type == KEYDOWN and event.key == K_ESCAPE:
+                        pygame.quit()
+                        sys.exit()
+                    if event.type == KEYDOWN:
+                        direction = event.key
+                    if event.type == KEYUP:
+                        direction = False
 
-    if spritey <= height:
-        spritex, spritey = move(direction, spritex, spritey)
-    else:
-        if con:
-            spritey, con, FPS = re(FPS, speed)
-        else:
-            over()
+                if spritey <= height:
+                    spritex, spritey = move(direction, spritex, spritey)
+                else:
+                    if con:
+                        spritey, con, FPS = re(FPS, speed)
+                    else:
+                        over()
 
-    if -cell <= spritebx - spritex <= cell and -cell <= spriteby - spritey <= cell:
-        con = True
-        spritebx, spriteby, point = new_pos(point)
-    pygame.display.update()
+                if -cell <= spritebx - spritex <= cell and -cell <= spriteby - spritey <= cell:
+                    con = True
+                    spritebx, spriteby, point = new_pos(point)
+                pygame.display.update()
