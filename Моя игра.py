@@ -78,10 +78,16 @@ def new_pos(lvl, point):
 
 def re(FPS, speed):
     spritey = 0
-    if FPS < 120:
-        FPS += 5
-    if speed < 20:
-        speed += 1
+    if lvl == 1:
+        if FPS < 60:
+            FPS += 5
+        if speed < 20:
+            speed += 1
+    else:
+        if FPS < 120:
+            FPS += 5
+        if speed < 30:
+            speed += 1
     con = False
     return spritey, con, FPS
 
