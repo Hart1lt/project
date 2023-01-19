@@ -1,9 +1,6 @@
 import pygame, sys
 from pygame.locals import *
 import random
-import sqlite3
-from PyQt5 import uic
-from PyQt5.QtWidgets import QWidget, QTableWidgetItem
 
 
 def drawText(text, font, surface, x, y):
