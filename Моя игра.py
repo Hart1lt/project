@@ -16,13 +16,18 @@ point = 0
 font1 = pygame.font.SysFont(None, 30)
 font2 = pygame.font.SysFont(None, 40)
 FPS = 10
+cell = 50
 fpsClock = pygame.time.Clock()
 width = 600
 height = 800
+spritex = width / 2
+spritey = 0
+spritebx = random.randint(0, width - cell)
+spriteby = random.randint(100, height - cell)
 mainSurface = pygame.display.set_mode((width, height), 0, 32)
 mainWindow = pygame.display.set_mode((width, height), 0, 32)
 pygame.display.set_caption('Космический шериф')
-cell = 50
+
 TEXTCOLOR = (255, 255, 255)
 buttoncol1 = (0, 255, 0)
 buttoncol2 = (0, 0, 255)
@@ -62,11 +67,13 @@ def move_villain(spritebx, min, max):
 def new_pos(lvl, point):
     spritebx = random.randint(0, width - cell)
     spriteby = random.randint(100, height - cell)
+    point += 1
     if lvl == 3:
         min = random.randint(0, width - 300)
         max = min + 300
-    point += 1
-    return spritebx, spriteby, point, min, max
+        return spritebx, spriteby, point, min, max
+    else:
+        return spritebx, spriteby, point
 
 
 def re(FPS, speed):
@@ -112,7 +119,6 @@ def get_click(q):
         print('None')
     else:
         coord = x, y
-        print(coord)
         return coord
 
 
@@ -168,12 +174,14 @@ def level(FPS, point):
 
 def game(FPS, lvl, point):
     global direction
-    spritex = width / 2
-    spritey = 0
-    spritebx = random.randint(0, width - cell)
-    spriteby = random.randint(100, height - cell)
-    min = random.randint(0, width - 300)
-    max = min + 300
+    global direction
+    global spritex
+    global spritey
+    global spritebx
+    global spriteby
+    global min
+    global max
+    global con
     while True:
         fpsClock.tick(FPS)
         if point <= 10:
@@ -187,7 +195,7 @@ def game(FPS, lvl, point):
         mainSurface.blit(sprite, (spritex, spritey))
         mainSurface.blit(spriteb, (spritebx, spriteby))
         if lvl == 3:
-            spritebx= move_villain(spritebx, min, max)
+            spritebx = move_villain(spritebx, min, max)
         drawText(str(point), font2, mainSurface, 10, 10)
         for event in pygame.event.get():
             if event.type == QUIT:
@@ -211,7 +219,10 @@ def game(FPS, lvl, point):
 
         if -cell <= spritebx - spritex <= cell and -cell <= spriteby - spritey <= cell:
             con = True
-            spritebx, spriteby, point, min, max = new_pos(lvl, point)
+            if lvl == 3:
+                spritebx, spriteby, point, min, max = new_pos(lvl, point)
+            else:
+                spritebx, spriteby, point = new_pos(lvl, point)
         pygame.display.update()
 
 
